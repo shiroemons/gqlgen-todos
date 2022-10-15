@@ -45,5 +45,6 @@
     make generate
     ```
 5. リゾルバーを実装する
+    - `schema.resolvers.go`
 
 refs: https://gqlgen.com/getting-started/
