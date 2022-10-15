@@ -32,7 +32,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: "./docker/server/Dockerfile"
     stdin_open: true
     tty: true
     depends_on:
