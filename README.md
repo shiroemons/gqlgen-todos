@@ -36,15 +36,21 @@
 
 1. スキーマを定義する
     - `graph/schema.graphqls`
-2. モデルを作成する
+2. テーブルを定義する
+    - `db/schema/schema.sql`
+3. マイグレーションを実行する
+    ```shell
+    make migrate
+    ```
+4. モデルを作成する
     - `graph/model/[モデル名].go`
-3. (必要な場合) リゾルバーの設定を追加する
+5. (必要な場合) リゾルバーの設定を追加する
     - `gqlgen.yml`
-4. `generate` コマンドを実行する
+6. `generate` コマンドを実行する
     ```shell
     make generate
     ```
-5. リゾルバーを実装する
+7. リゾルバーを実装する
     - `schema.resolvers.go`
 
 refs: https://gqlgen.com/getting-started/
