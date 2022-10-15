@@ -63,6 +63,14 @@ func playgroundHandler() gin.HandlerFunc {
 	}
 }
 
+func GinContextToContextMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx := context.WithValue(c.Request.Context(), "GinContextKey", c)
+		c.Request = c.Request.WithContext(ctx)
+		c.Next()
+	}
+}
+
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -71,6 +79,7 @@ func main() {
 
 	router := gin.Default()
 
+	router.Use(GinContextToContextMiddleware())
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:" + port},
 		AllowCredentials: true,
