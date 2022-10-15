@@ -1,8 +1,34 @@
-FROM golang:1.19
+# Build Stage
+FROM golang:1.19-alpine AS builder
 
 WORKDIR /app
-COPY ./ /app
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+COPY . .
+
+RUN go build -ldflags "-w -s" -o server
+
+
+# Production Stage
+FROM alpine:latest AS production
+
+WORKDIR /app
+RUN apk update
+
+COPY --from=builder /app/server .
 
 EXPOSE 8080
 
-CMD ["go", "run", "server.go"]
+CMD ["./server"]
+
+
+# Local Stage
+FROM golang:1.19 as devlop
+
+WORKDIR /app
+
+RUN go install github.com/cosmtrek/air@latest
+
+CMD ["air"]
