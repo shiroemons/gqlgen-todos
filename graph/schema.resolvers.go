@@ -5,12 +5,29 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/lucsky/cuid"
 
 	"github.com/shiroemons/gqlgen-todos/graph/generated"
 	"github.com/shiroemons/gqlgen-todos/graph/model"
 )
+
+func GinContextFromContext(ctx context.Context) (*gin.Context, error) {
+	ginContext := ctx.Value("GinContextKey")
+	if ginContext == nil {
+		err := fmt.Errorf("could not retrieve gin.Context")
+		return nil, err
+	}
+
+	gc, ok := ginContext.(*gin.Context)
+	if !ok {
+		err := fmt.Errorf("gin.Context has wrong type")
+		return nil, err
+	}
+	return gc, nil
+}
 
 // CreateTodo is the resolver for the createTodo field.
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
