@@ -16,30 +16,27 @@
     make init
     ```
 2. DB のセットアップ
-   - 2.1. DBを起動する
-     ```shell
-     make database-up
-     ```
-   - 2.2. 別のシェルでマイグレーションを実行する
-     ```shell
-     make migrate
-     ```
-   - 2.3. DBを停止する
-     - `Ctrl` + `C`
+  - 2.1. DBを起動する
+    ```shell
+    make db-up
+    ```
+  - 2.2. 別のシェルでマイグレーションを実行する
+    ```shell
+    make migrate
+    ```
 3. サーバーを起動する
-   - 通常実行
-     ```shell
-     make server-up
-     ```
-     - `Ctrl` + `C` で停止する
-   - バックグラウンドで実行する場合
-     ```shell
-     make server-upbg
-     ```
-     - 停止する場合は以下を実行する
-     ```shell
-     make server-down
-     ```
+  - バックグラウンドで実行する
+    ```shell
+    make up
+    ```
+  - 実行ログを確認する
+    ```shell
+    make logs
+    ```
+  - 停止する場合は以下を実行する
+    ```shell
+    make down
+    ```
 
 ## gqlgen開発手順
 
