@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY ../.. .
 
-RUN go build -ldflags "-w -s" -o server
+RUN go build -ldflags "-w -s" -o server cmd/server/main.go
 
 
 # Production Stage
