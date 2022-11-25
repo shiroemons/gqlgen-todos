@@ -14,37 +14,14 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/stdlib"
-	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/pgdialect"
-
 	"github.com/shiroemons/gqlgen-todos/graph/generated"
 	"github.com/shiroemons/gqlgen-todos/graph/resolver"
+	"github.com/shiroemons/gqlgen-todos/internal/infrastructure/database"
 )
 
 const defaultPort = "8080"
 
-func newDB() *bun.DB {
-	config, err := pgx.ParseConfig(os.Getenv("CONNECT_URL"))
-	if err != nil {
-		panic(err)
-	}
-
-	sqldb := stdlib.OpenDB(*config)
-	db := bun.NewDB(sqldb, pgdialect.New())
-
-	var v string
-	if err = db.NewSelect().ColumnExpr("version()").Scan(context.Background(), &v); err != nil {
-		log.Fatal(err)
-	}
-	log.Println(v)
-
-	return db
-}
-
-func graphqlHandler() gin.HandlerFunc {
-	db := newDB()
+func graphqlHandler(db *database.DB) gin.HandlerFunc {
 	// NewExecutableSchema and Config are in the generated.go file
 	// Resolver is in the resolver.go file
 	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver.Resolver{DB: db}}))
@@ -72,6 +49,9 @@ func GinContextToContextMiddleware() gin.HandlerFunc {
 }
 
 func main() {
+	db := database.New()
+	defer db.Close()
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
@@ -88,7 +68,7 @@ func main() {
 	router.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
-	router.POST("/query", graphqlHandler())
+	router.POST("/query", graphqlHandler(db))
 	router.GET("/", playgroundHandler())
 
 	srv := &http.Server{
