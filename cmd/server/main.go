@@ -19,8 +19,8 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 
-	"github.com/shiroemons/gqlgen-todos/graph"
 	"github.com/shiroemons/gqlgen-todos/graph/generated"
+	"github.com/shiroemons/gqlgen-todos/graph/resolver"
 )
 
 const defaultPort = "8080"
@@ -47,7 +47,7 @@ func graphqlHandler() gin.HandlerFunc {
 	db := newDB()
 	// NewExecutableSchema and Config are in the generated.go file
 	// Resolver is in the resolver.go file
-	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{DB: db}}))
+	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver.Resolver{DB: db}}))
 
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
