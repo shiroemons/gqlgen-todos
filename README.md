@@ -1,13 +1,13 @@
 # gqlgen-todos
 
 - 以下のファイルに `shiroemons/gqlgen-todos` が含まれているため変更が必要です。
-  - README.md
   - Makefile
+  - README.md
+  - cmd/server/main.go
   - go.mod
   - gqlgen.yml
   - graph/generated/generated.go
-  - graph/schema.resolvers.go
-  - server.go
+  - graph/resolver/schema.resolvers.go
 
 ## 環境構築
 
@@ -49,7 +49,7 @@
 3. モデルを作成する
   - `graph/model/[モデル名].go`
 4. スキーマを定義する
-  - `graph/schema.graphqls`
+  - `schema.graphqls`
 5. (必要な場合) リゾルバーの設定を追加する
   - `gqlgen.yml`
 6. `generate` コマンドを実行する
@@ -57,6 +57,6 @@
     make generate
     ```
 7. リゾルバーを実装する
-  - `schema.resolvers.go`
+  - `graph/resolver/schema.resolvers.go`
 
 refs: https://gqlgen.com/getting-started/
